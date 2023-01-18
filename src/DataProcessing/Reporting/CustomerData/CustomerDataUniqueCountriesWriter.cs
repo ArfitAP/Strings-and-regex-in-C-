@@ -2,8 +2,11 @@
 
 internal class CustomerDataUniqueCountriesWriter : DataWriter<IEnumerable<HistoricalCustomerData>>
 {
+    private readonly StringComparer _stringComparer;
+
     public CustomerDataUniqueCountriesWriter(ProcessingOptions options, CultureInfo cultureInfo) : base(options)
     {
+        _stringComparer = StringComparer.Create(cultureInfo, true);
     }
 
     public CustomerDataUniqueCountriesWriter(ProcessingOptions options) : this(options, options.ApplicationCulture)
@@ -16,6 +19,9 @@ internal class CustomerDataUniqueCountriesWriter : DataWriter<IEnumerable<Histor
         CancellationToken cancellationToken = default)
     {
         // TODO - Implementation
+        var contries = new SortedSet<string>(data.Select(d => d.Country), _stringComparer);
+
+
         return Task.CompletedTask;
     }
 }

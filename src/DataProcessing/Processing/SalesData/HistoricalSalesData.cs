@@ -137,5 +137,16 @@ internal sealed class HistoricalSalesData
         return false;
     }
 
-    public bool IsValid => true;
+    public bool IsValid => 
+        !string.IsNullOrWhiteSpace(ProductName) &&
+        Category != default &&
+        Quantity >= 0 &&
+        UnitPrice >= 0 &&
+        SalesTaxPercentage >= 0 && SalesTaxPercentage <= 100 &&
+        UtcSalesDateTime > DateTimeOffset.MinValue &&
+        !string.IsNullOrWhiteSpace(CurrencySymbol) &&
+        !string.IsNullOrWhiteSpace(ProductSalesCode) &&
+        !ProductSalesCode.Equals(ProductInfo.InvalidValue) &&
+        !string.IsNullOrWhiteSpace(ProductSku) &&
+        !ProductSku.Equals(ProductInfo.InvalidValue);
 }
