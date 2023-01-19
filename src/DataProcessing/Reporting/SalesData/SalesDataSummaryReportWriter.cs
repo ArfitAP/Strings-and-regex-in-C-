@@ -24,6 +24,17 @@ internal class SalesDataSummaryReportWriter : DataWriter<IEnumerable<HistoricalS
         CancellationToken cancellationToken = default)
     {
         // TODO - Implementation
-        return string.Empty;
+        //var formattedOutput = "Data exported by " + SessionContext.Forename + " " + SessionContext.Surname + Environment.NewLine;
+        var formattedOutput = $"Data exported by {SessionContext.Forename} {SessionContext.Surname}{Environment.NewLine}";
+
+        foreach (var item in salesData.OrderBy(s => s.UtcSalesDateTime))
+        {
+            //formattedOutput += "Date: " + item.UtcSalesDateTime.ToString("D", Options.ApplicationCulture) + Environment.NewLine;
+            formattedOutput += string.Format(Options.ApplicationCulture, "Date: {0:D}{1}", item.UtcSalesDateTime, Environment.NewLine);
+            formattedOutput += "Product name: " + item.ProductName + Environment.NewLine;
+            formattedOutput += "Product sku: " + item.ProductSku + Environment.NewLine;
+        }
+
+        return formattedOutput;
     }
 }

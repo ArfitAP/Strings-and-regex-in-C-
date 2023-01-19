@@ -1,4 +1,7 @@
-﻿namespace DataProcessing;
+﻿using System.Net;
+using System.Text.RegularExpressions;
+
+namespace DataProcessing;
 
 internal class InsecureClientsProxyLogProcessor : Processor<InsecureHostsByIPAddressDictionary>
 {
@@ -17,8 +20,21 @@ internal class InsecureClientsProxyLogProcessor : Processor<InsecureHostsByIPAdd
         var logData = await dataReader.ReadAllRowsAsync(cancellationToken);
 
         // TODO - Match
+        var match = Regex.Match(logData, RegexPattern, RegexOptions.Multiline, TimeSpan.FromSeconds(1));
 
         var insecureHostsByIp = new InsecureHostsByIPAddressDictionary();
+
+        while(match.Success)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (IPAddress.TryParse(match.Groups["ip"].Value, out var iPAddress))
+            {
+                insecureHostsByIp.AddWhenUnique(iPAddress, match.Groups["hostname"].Value);
+            }
+
+            match = match.NextMatch();
+        }
 
         // TODO - Process Matches
 

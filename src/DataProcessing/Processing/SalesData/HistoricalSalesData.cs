@@ -151,4 +151,18 @@ internal sealed class HistoricalSalesData
         !ProductSalesCode.Equals(ProductInfo.InvalidValue) &&
         !string.IsNullOrWhiteSpace(ProductSku) &&
         !ProductSku.Equals(ProductInfo.InvalidValue);
+
+    public string[] GetFormattedComponents(CultureInfo culture) =>
+        new string[]
+        {
+            UtcSalesDateTime.ToString("u", culture),
+            ProductSalesCode,
+            ProductSku,
+            ProductName,
+            Category.Code,
+            Currency,
+            UnitPrice.ToString("N2", culture),
+            Quantity.ToString("N0", culture),
+            SalesTaxPercentage.ToString("N0", culture)
+        };
 }

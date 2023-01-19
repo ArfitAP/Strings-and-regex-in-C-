@@ -35,7 +35,11 @@ internal class SalesData
             var codesWriter = new SalesCategoryCodesWriter(options);
             await codesWriter.WriteAsync("uk-sales-category-codes.txt", ukData.ProcessedData, cancellationToken);
 
+            var summaryWriter = new SalesDataSummaryReportWriter(options);
+            await summaryWriter.WriteAsync("uk-sales.txt", ukData.ProcessedData, cancellationToken);
 
+            var salesDataWriter = new SalesDataWriter(options);
+            await salesDataWriter.WriteAsync("uk-sales-data.txt", ukData.ProcessedData, cancellationToken);
         }
     }
 }
