@@ -4,6 +4,9 @@ global using DataProcessing.Input;
 global using DataProcessing.Reporting;
 global using Microsoft.Extensions.Logging;
 
+using System.Text.RegularExpressions;
+
+
 // Marks when the app is past the user data collection phase.
 var initialized = false; 
 
@@ -26,6 +29,7 @@ Console.CancelKeyPress += (s, e) =>
 
 try
 {
+    /*
     // Configure a logger factory that can provide loggers where required for logging progress.
     using var loggerFactory = LoggerFactory.Create(builder => builder
         .AddFilter("Microsoft", LogLevel.Warning)
@@ -66,6 +70,34 @@ try
     Console.WriteLine();
     Console.WriteLine("COMPLETED: Press any key to exit.");
     Console.ReadKey();
+    */
+
+    var patterns = new List<string>() { "a*b", "a+b", "a?b" };
+    var inputs = new List<string>() { "a", "b", "ab", "aab", "abb" };
+
+    patterns.ForEach(pattern =>
+    {
+        Console.WriteLine("Regular expression: {0}", pattern);
+        var Regex = new Regex(pattern);
+        inputs.ForEach(input =>
+        {
+            Console.WriteLine("\tInput pattern: {0}", input);
+            var results = Regex.Matches(input);
+
+            if(results.Count <= 0)
+            {
+                Console.WriteLine("\t\tNo matches found.");
+            }
+            foreach(Match result in results)
+            {
+                Console.WriteLine("\t\tMatch found at index {0}. Length: {1}.", result.Index, result.Length);
+                foreach (Group group in result.Groups)
+                {
+                    Console.WriteLine("\t\t\tGroup at index {0} has value {1}.", group.Index, group.Value);
+                }
+            }
+        });
+    });
 }
 catch (OperationCanceledException)
 {
