@@ -72,8 +72,15 @@ try
     Console.ReadKey();
     */
 
-    var patterns = new List<string>() { "a*b", "a+b", "a?b" };
-    var inputs = new List<string>() { "a", "b", "ab", "aab", "abb" };
+    var patterns = new List<string>() {
+        @"^<(?<tag>[a-z]+).*?>(?<inner>[^<]*)</\1>"
+    };
+
+
+    var inputs = new List<string>() { 
+        "a", 
+        "<tag style=\"top: 2px\">abc</tag>" 
+    };
 
     patterns.ForEach(pattern =>
     {
@@ -93,7 +100,7 @@ try
                 Console.WriteLine("\t\tMatch found at index {0}. Length: {1}.", result.Index, result.Length);
                 foreach (Group group in result.Groups)
                 {
-                    Console.WriteLine("\t\t\tGroup at index {0} has value {1}.", group.Index, group.Value);
+                    Console.WriteLine("\t\t\tGroup {0} at index {1} has value {2}.", group.Name, group.Index, group.Value);
                 }
             }
         });
